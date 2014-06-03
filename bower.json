@@ -1,0 +1,28 @@
+{
+  "name": "casting",
+  "main": "lib/index.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/codemix/casting",
+  "authors": [
+    "Charles Pick <charles@codemix.com>"
+  ],
+  "description": "Tiny type casting library for node.js and the browser.",
+  "moduleType": [
+    "node"
+  ],
+   "keywords": [
+    "types",
+    "type cast",
+    "typecasting",
+    "cast",
+    "casting"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
