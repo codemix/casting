@@ -72,6 +72,12 @@ describe('Casting', function () {
     });
   });
 
+  describe('forDescriptor()', function () {
+    it('should cast values', function () {
+      Casting.forDescriptor({type: 'string'})(123).should.equal('123');
+    });
+  });
+
   describe('define()', function () {
     function User (attributes) {
       var keys = Object.keys(attributes),
