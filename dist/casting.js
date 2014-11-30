@@ -1,4 +1,5 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Casting=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function (global){
 "use strict";
 
 /**
@@ -31,7 +32,7 @@ exports.define = function (name, Constructor, caster) {
  * Get a function which can cast values to the given type.
  *
  * @param  {String|Function} type The type or name of the type to cast to.
- * @return {mixed}                The casting function, or undefined if none exists.
+ * @return {Function}             The casting function.
  */
 exports.get = function (type) {
   var casters = exports.casters,
@@ -45,6 +46,17 @@ exports.get = function (type) {
     }
   }
 
+  return function (value) {
+    if (typeof type === 'string') {
+      type = global[type];
+    }
+    if (!(value instanceof type)) {
+      return new type(value); /* jshint ignore: line */
+    }
+    else {
+      return value;
+    }
+  };
 };
 
 /**
@@ -98,6 +110,23 @@ exports.forDescriptors = function (descriptors) {
   return (new Function('casters', 'object', lines.join('\n'))).bind(undefined, casters); // jshint ignore: line
 };
 
+/**
+ * Create a function which can cast a property according to the given descriptor.
+ *
+ * @param  {Object} descriptor  The descriptor containing the type.
+ * @return {Function}           The cast function.
+ */
+exports.forDescriptor = function (descriptor) {
+  if (descriptor.type) {
+    return exports.get(descriptor.type);
+  }
+  else {
+    return function (a) {
+      return a;
+    };
+  }
+};
+
 // # Builtin Types
 
 
@@ -147,6 +176,7 @@ exports.define('date', Date, function (value) {
   }
   return value;
 });
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}]},{},[1])
 (1)
 });
